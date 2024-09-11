@@ -1,33 +1,46 @@
-# react-native-battery-status
+# React Native Battery Status
 
-get status of battery
+**React Native Battery Status** is a library that allows you to access and monitor the battery status of mobile devices using React Native.
 
 ## Installation
 
-```sh
+To install the library, run the following command:
+
+```bash
 npm install react-native-battery-status
 ```
 
+If you are using iOS, remember to run the `pod install` command inside the `ios` directory after installation.
+
 ## Usage
 
+Import the methods provided by the library and use them in your application:
 
 ```js
-import { multiply } from 'react-native-battery-status';
+import { getBatteryStatusAsync, useBatteryStatus } from 'react-native-battery-status';
 
-// ...
+// Example using getBatteryStatusAsync to get the current battery status.
+const batteryPercentage = await getBatteryStatusAsync();
 
-const result = await multiply(3, 7);
+// Example using useBatteryStatus as a hook to monitor battery status in real-time.
+const batteryPercentage = useBatteryStatus();
 ```
 
+### Available Methods
+
+- **getBatteryStatusAsync()**: Returns the current battery percentage of the device.
+- **useBatteryStatus()**: A React hook that provides the battery percentage in real-time.
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+If you would like to contribute to the development of this package, please check out our [Contributing Guide](CONTRIBUTING.md) for more information on the development workflow.
 
 ## License
 
-MIT
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
+Created with [create-react-native-library](https://github.com/callstack/react-native-builder-bob).
+
+---
