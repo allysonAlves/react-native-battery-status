@@ -4,10 +4,12 @@
 
 # XDE
 .expo/
+*.tgz
 
 # VSCode
 .vscode/
 jsconfig.json
+.watchman-cookie*
 
 # Xcode
 #

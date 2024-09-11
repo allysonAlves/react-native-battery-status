@@ -1,4 +1,5 @@
-import { NativeModules, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
+import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
 
 const LINKING_ERROR =
   `The package 'react-native-battery-status' doesn't seem to be linked. Make sure: \n\n` +
@@ -6,7 +7,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const BatteryStatus = NativeModules.BatteryStatus
+const BatteryStatusModule = NativeModules.BatteryStatus
   ? NativeModules.BatteryStatus
   : new Proxy(
       {},
@@ -17,6 +18,32 @@ const BatteryStatus = NativeModules.BatteryStatus
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return BatteryStatus.multiply(a, b);
+export function getBatteryStatusAsync(): Promise<number> {
+  return BatteryStatusModule.getBatteryStatusAsync();
+}
+
+const BatteryEventEmitter = new NativeEventEmitter(BatteryStatusModule);
+
+export function useBatteryStatus() {
+  const [batteryPercentage, setBatteryPercentage] = useState<number | null>(
+    null
+  );
+
+  useEffect(() => {
+    BatteryStatusModule.addListener('onBatteryStatusChange');
+
+    const subscription = BatteryEventEmitter.addListener(
+      'onBatteryStatusChange',
+      (newBatteryPercentage) => {
+        setBatteryPercentage(newBatteryPercentage.toFixed(2));
+      }
+    );
+
+    return () => {
+      BatteryStatusModule.removeListeners(1);
+      subscription.remove();
+    };
+  }, []);
+
+  return batteryPercentage;
 }
